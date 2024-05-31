@@ -11,18 +11,9 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if title.len() > 50 {
-            panic!("Title cannot be longer than 50 bytes");
-        }
-        if description.is_empty() {
-            panic!("Description cannot be empty");
-        }
-        if description.len() > 500 {
-            panic!("Description cannot be longer than 500 bytes");
-        }
+        Self::validate_title(&title);
+        Self::validate_description(&description);
+
         if status != "To-Do" && status != "In Progress" && status != "Done" {
             panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
@@ -34,12 +25,53 @@ impl Ticket {
         }
     }
 
+    fn validate_title(title: &String) {
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+
+        if title.len() > 50 {
+            panic!("Title cannot be longer than 50 bytes");
+        }
+    }
+
+    pub fn set_title(&mut self, title: String) {
+        Self::validate_title(&title);
+        self.title = title;
+    }
+
     pub fn title(&self) -> &String {
         &self.title
     }
 
+    fn validate_description(description: &String) {
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        Self::validate_description(&description);
+        self.description = description
+    }
+
     pub fn description(&self) -> &String {
         &self.description
+    }
+
+    fn validate_status(status: &String) {
+        if status != "To-Do" && status != "In Progress" && status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        Self::validate_status(&status);
+        self.status = status;
     }
 
     pub fn status(&self) -> &String {
