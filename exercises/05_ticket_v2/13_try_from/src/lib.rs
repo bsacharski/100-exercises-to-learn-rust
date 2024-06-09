@@ -8,6 +8,33 @@ enum Status {
     Done,
 }
 
+use std::convert::TryFrom;
+impl TryFrom<String> for Status {
+    type Error = String;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        map_status(value.as_str())
+    }
+}
+
+impl TryFrom<&str> for Status {
+    type Error = String;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        map_status(value)
+    }
+}
+
+fn map_status(input: &str) -> Result<Status, String> {
+    let normalized_input = input.to_lowercase();
+    match normalized_input.as_str() {
+        "todo" => Ok(Status::ToDo),
+        "inprogress" => Ok(Status::InProgress),
+        "done" => Ok(Status::Done),
+        _ => Err(format!("Unknow status: {}", input)),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
