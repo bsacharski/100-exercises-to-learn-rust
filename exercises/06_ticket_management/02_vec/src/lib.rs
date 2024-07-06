@@ -10,12 +10,28 @@
 //
 // We expect `fibonacci(0)` to return `0`, `fibonacci(1)` to return `1`,
 // `fibonacci(2)` to return `1`, and so on.
+
+static mut FIBONACCI_NUMBERS: Vec<u32> = Vec::new();
+
 pub fn fibonacci(n: u32) -> u32 {
-    // TODO: implement the `fibonacci` function
-    //
-    // Hint: use a `Vec` to memoize the results you have already calculated
-    // so that you don't have to recalculate them several times.
-    todo!()
+    let idx = usize::try_from(n).unwrap();
+
+    unsafe {
+        if FIBONACCI_NUMBERS.len() == 0 {
+            FIBONACCI_NUMBERS.push(0);
+            FIBONACCI_NUMBERS.push(1);
+            FIBONACCI_NUMBERS.push(1);
+        }
+
+        let result = FIBONACCI_NUMBERS.get(idx);
+        if result.is_none() {
+            let a = fibonacci(n - 2);
+            let b = fibonacci(n - 1);
+            FIBONACCI_NUMBERS.push(a + b);
+        }
+
+        return FIBONACCI_NUMBERS[idx];
+    }
 }
 
 #[cfg(test)]
